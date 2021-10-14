@@ -5,6 +5,7 @@ class Kampus extends C1_Controller{
         parent::__construct();
         $this->load->model('m_data');
         $this->load->helper('url');
+		$this->load->library('from_validation');
     }
 
     function index() {
@@ -17,16 +18,38 @@ class Kampus extends C1_Controller{
     }
 
     function tambah_aksi() {
+	$this->form_validation->set_rules('nim','NIM','required|min_length[8]max_length[8]');
+	$this->form_validation->set_rules('nama','NAMA','required|alpha|min_length[5]max_length[15]');
+	$this->form_validation->set_rules('alamat','ALAMAT','required|alpha');
+	$this->form_validation->set_rules('pekerjaan','PEKERJA','required|alpha');
+	
+	if($this->form_validation->run() == TRUE)
+	{
         $nim = $this->input->post('nim');
         $nama = $this->input->post('nama');
         $alamat = $this->input->post('alamat');
         $pekerjaan = $this->input->post('pekerjaan');
 
-        $data = array(
+        $config['max_size']2048;
+		$config['allowed_types']="png|jgp|jpeg|gif";
+		$config['remove_spaces']=TRUE;
+		$config['overwrite']=TRUE;
+		$config['upload_path']=FCPATH.'images';
+		
+		$this->load->library('upload');
+		$this->upload->initialize($config);
+		
+		$this->upload->do_upload('foto');
+		$data_image=$this->upload->data('file_name');
+		$location='images/';
+		$foto=$location.$data_image;
+		
+		$data = array(
             'nim' => $nim,
             'nama' =>$nama,
             'alamat' =>$alamat,
             'pekerjaan' =>$pekerjaan
+			'foto' =>$foto
             );
         $this->m_data->input_data($data,'mahasiswa');
         redirect('kampus/index');
@@ -43,11 +66,26 @@ class Kampus extends C1_Controller{
         $alamat = $this->input->post('alamat');
         $pekerjaan = $this->input->post('pekerjaan');
 
+		$config['max_size']2048;
+		$config['allowed_types']="png|jgp|jpeg|gif";
+		$config['remove_spaces']=TRUE;
+		$config['overwrite']=TRUE;
+		$config['upload_path']=FCPATH.'images';
+		
+		$this->load->library('upload');
+		$this->upload->initialize($config);
+		
+		$this->upload->do_upload('foto');
+		$data_image=$this->upload->data('file_name');
+		$location='images/';
+		$foto=$location.$data_image;
+		
 		$data = array(
             'nim' => $nim,
             'nama' =>$nama,
             'alamat' =>$alamat,
             'pekerjaan' =>$pekerjaan
+			'foto'=>$foto
             );
 		
 		$where = array(
