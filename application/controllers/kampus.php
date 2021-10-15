@@ -5,7 +5,7 @@ class Kampus extends C1_Controller{
         parent::__construct();
         $this->load->model('m_data');
         $this->load->helper('url');
-		$this->load->library('from_validation');
+		$this->load->library('form_validation');
     }
 
     function index() {
@@ -16,7 +16,6 @@ class Kampus extends C1_Controller{
     function tambah() {
         $this->load->view('input_data');
     }
-
     function tambah_aksi() {
 	$this->form_validation->set_rules('nim','NIM','required|min_length[8]max_length[8]');
 	$this->form_validation->set_rules('nama','NAMA','required|alpha|min_length[5]max_length[15]');
